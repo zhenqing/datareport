@@ -1,0 +1,67 @@
+<html>
+	<head>
+		<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    		<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    
+		<script type="text/javascript"> 
+var wrapper;
+function drawVisualization() {
+
+  // Draw a column chart
+  wrapper = new google.visualization.ChartWrapper({
+    chartType: 'ColumnChart',
+    dataTable: [['Germany', 'USA', 'Brazil', 'Canada', 'France', 'RU'],
+                [700, 300, 400, 500, 600, 800]],
+    options: {'title': 'Countries'},
+    containerId: 'visualization'
+  });
+
+  // Never called.
+  google.visualization.events.addListener(wrapper, 'onmouseover', uselessHandler);
+
+  // Must wait for the ready event in order to
+  // request the chart and subscribe to 'onmouseover'.
+  google.visualization.events.addListener(wrapper, 'ready', onReady);
+
+  wrapper.draw();
+
+  // Never called
+  function uselessHandler() {
+    alert("I am never called!");
+  }
+
+  function onReady() {
+    google.visualization.events.addListener(wrapper.getChart(), 'onmouseover', usefulHandler);
+  }
+
+  // Called
+  function usefulHandler() {
+    alert("Mouseover event!");
+  }
+}
+var data = new google.visualization.DataTable();
+  data.addColumn('string', 'Department');
+  data.addColumn('number', 'Revenues');
+  data.addRows([
+    ['Shoes', 10700],
+    ['Sports', -15400],
+    ['Toys', 12500],
+    ['Electronics', -2100],
+    ['Food', 22600],
+    ['Art', 1100]
+  ]);
+
+  var table = new google.visualization.Table(document.getElementById('colorformat_div'));
+  
+  var formatter = new google.visualization.ColorFormat();
+  formatter.addRange(-20000, 0, 'white', 'orange');
+  formatter.addRange(20000, null, 'red', '#33ff33');
+  formatter.format(data, 1); // Apply formatter to second column
+  
+  table.draw(data, {allowHtml: true, showRowNumber: true});
+		</script>
+	</head>
+	<body>
+		<div id="colorformat_div" width="500" height="500"></div>
+	</body>
+</html>
